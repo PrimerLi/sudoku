@@ -165,7 +165,9 @@ public class Sudoku
         if (value == 0)
             return true;
         if (!valueInRow(value, row) && !valueInCol(value, col) && !valueInZone(value, row, col))
+        {
             return true;
+        }
         return false;
     }
 
@@ -195,9 +197,49 @@ public class Sudoku
         {
             for (int j = 0; j < dimension; ++j)
             {
-                if (!isSafe(matrix[i][j], i, j))
+                if (matrix[i][j] == 0)
+                    continue;
+                for (int col = 0; col < dimension; ++col)
                 {
-                    return false;
+                    if (col == j)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        if (matrix[i][col] == matrix[i][j])
+                            return false;
+                    }
+                }
+                for (int row  = 0; row < dimension; ++row)
+                {
+                    if (row == i)
+                        continue;
+                    else
+                    {
+                        if (matrix[row][j] == matrix[i][j])
+                            return false;
+                    }
+                }
+                int rowStart, rowEnd;
+                int colStart, colEnd;
+                ArrayList<ArrayList<Integer>> cornerIndices = this.getZoneCornerIndices(i, j);
+                rowStart = cornerIndices.get(0).get(0);
+                rowEnd = cornerIndices.get(0).get(1);
+                colStart = cornerIndices.get(1).get(0);
+                colEnd = cornerIndices.get(1).get(1);
+                for (int row = rowStart; row <= rowEnd; ++row)
+                {
+                    for (int col = colStart; col <= colEnd; ++col)
+                    {
+                        if (row == i && col == j)
+                            continue;
+                        else
+                        {
+                            if (matrix[row][col] == matrix[i][j])
+                                return false;
+                        }
+                    }
                 }
             }
         }
@@ -267,7 +309,7 @@ public class Sudoku
                 matrix[i][j] = 0;
             }
         }
-        /*try
+        try
         {
             Scanner scanner = new Scanner(new File("sudoku_1.txt"));
             while(scanner.hasNextInt())
@@ -282,9 +324,7 @@ public class Sudoku
         catch(FileNotFoundException e)
         {
             e.printStackTrace();
-        }*/
-        matrix[0][0] = 1;
-        matrix[0][1] = 1;
+        }
         Sudoku sudoku = new Sudoku(matrix);
         System.out.println("Sudoku: ");
         sudoku.print();

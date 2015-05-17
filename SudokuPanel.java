@@ -19,7 +19,7 @@ public class SudokuPanel extends JPanel
             for (int j = 0; j < dimension; ++j)
             {
                 JTextField temp = new JTextField();
-                temp.setColumns(5);
+                temp.setColumns(2);
                 temp.setFont(new Font("serif", Font.PLAIN, 24));
                 matrix[i][j] = temp;
                 this.add(temp);
